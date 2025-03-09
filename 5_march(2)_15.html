@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        
+        header {
+            background-color: #ff6347;
+            color: navy;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav {
+            text-align: center;
+            padding: 10px;
+            background-color: #ff6347;
+           
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px 0;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        
+        .about img {
+            width: 150px;
+            height: 150px;
+            background-color: #e0e0e0;
+            display: block;
+            margin-top: 10px;
+        }
+
+        
+        .project {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .project h3 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .project a {
+            color: blue;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        
+        .contact form {
+            margin-top: 20px;
+        }
+
+        .contact label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .contact input,
+        .contact textarea {
+            
+            padding: 6px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .contact textarea {
+            height: 100px;
+        }
+
+        
+        .contact button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background-color:white;
+            color: black;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+
+        
+        footer {
+            background-color: #ff6347;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        Welcome to My Portfolio
+    </header>
+    
+    <nav>
+        <a href="#">About</a>
+        <a href="#">Projects</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <div class="container">
+
+        <section class="about">
+            <h2>About Me</h2>
+            <p>Hello! I'm a web developer with a passion for creating functional and beautiful web applications.</p>
+            
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Picture">
+        </section>
+        <br>
+
+        <section class="projects">
+            <h2>Projects</h2>
+
+            <div class="project">
+                <h3>Project One: Personal Blog</h3>
+                <p><strong>Screenshot of my personal blog project</strong></p>
+                <p>A personal blog where I write about web development, programming, and technology.</p>
+                <a href="#">View Project</a>
+                <ul>
+                <p><strong>Technologies Used:</strong></p>
+                <ul>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+            </ul>
+            </div>
+
+            <div class="project">
+                <h3>Project Two: E-commerce Site</h3>
+                <p><strong>Screenshot of my e-commerce project</strong></p>
+                <p>An e-commerce website built to simulate a real-world online shopping experience.</p>
+                <a href="#">View Project</a>
+                <ul>
+                <p><strong>Technologies Used:</strong></p>
+                <ul>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+            </ul>
+            </div>
+
+        </section>
+
+        <section class="contact">
+            <h2>Contact Me</h2>
+            <form>
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name">
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message"></textarea>
+                <br>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+
+    </div>
+
+    <footer>
+        © 2024 My Portfolio <br>
+        Follow me on <a href="#">Twitter</a> | <a href="#">GitHub</a>
+    </footer>
+
+</body>
+</html>
