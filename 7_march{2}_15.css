@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 10px;
+}
+
+.section {
+    padding: 10px;
+}
+
+.section a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.section-1 a {
+    color: lightblue;
+}
+
+.section-2 a {
+    color: lightgreen;
+}
+
+.section-3 a {
+    color: lightcoral;
+}
+
+.section > a {
+    font-weight: bold;
+}
+
+.submenu a {
+    font-style: italic;
+}
+
+.section a:hover {
+    color: white;
+    background-color: #555;
+}
+
+.section a:active {
+    color: yellow;
+}
+
+.section a[href^="https"] {
+    color: orange !important;
+}
