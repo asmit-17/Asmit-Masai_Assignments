@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Card Layout</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            margin-bottom: 15px;
+        }
+
+        .card button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        @media (min-width: 600px) and (max-width: 1024px) {
+            .card-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .card-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Card 1">
+            <h2>Card 1</h2>
+            <p>Description for Card 1.</p>
+            <button>Read More</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Card 2">
+            <h2>Card 2</h2>
+            <p>Description for Card 2.</p>
+            <button>Read More</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Card 3">
+            <h2>Card 3</h2>
+            <p>Description for Card 3.</p>
+            <button>Read More</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Card 4">
+            <h2>Card 4</h2>
+            <p>Description for Card 4.</p>
+            <button>Read More</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Card 5">
+            <h2>Card 5</h2>
+            <p>Description for Card 5.</p>
+            <button>Read More</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/150" alt="Card 6">
+            <h2>Card 6</h2>
+            <p>Description for Card 6.</p>
+            <button>Read More</button>
+        </div>
+    </div>
+</body>
+</html>

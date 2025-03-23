@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investors Grid</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .grid-item {
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+
+        .grid-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .grid-item h3 {
+            margin-bottom: 5px;
+        }
+
+        .grid-item p {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Strategic Investors</h1>
+    </div>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Vijay_Shekhar_Sharma_019a0feb89.webp" alt="Vijay Shekhar Sharma">
+            <h3>Vijay Shekhar Sharma</h3>
+            <p>FCEO Paytm</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Kunal_Shah_92a3fba8c9.webp" alt="Kunal Shah">
+            <h3>Kunal Shah</h3>
+            <p>CRED</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Amrish_Rau_47b19a15f0.webp" alt="Amrish Rau">
+            <h3>Amrish Rau</h3>
+            <p>Pine Labs</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Sampad_Swain_6924612948.webp" alt="Sampad Swain">
+            <h3>Sampad Swain</h3>
+            <p>Co-Founder & CEO Instamojo</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Ankush_Sachdeva_3a91819343.webp" alt="Ankush Sachdeva">
+            <h3>Ankush Sachdeva</h3>
+            <p>Co-Founder & CEO ShareChat</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Bhanu_Pratap_Singh_6336ba423f.webp" alt="Bhanu Pratap Singh">
+            <h3>Bhanu Pratap Singh</h3>
+            <p>CTO ShareChat</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Farid_Ahsan_9f899e7424.webp" alt="Farid Ahsan">
+            <h3>Farid Ahsan</h3>
+            <p>Co-Founder & COO ShareChat</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Amit_Kumar_Agarwal_00289f6684.webp" alt="Amit Kumar Agarwal">
+            <h3>Amit Kumar Agarwal</h3>
+            <p>Founder & CEO NOBROKER</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Akhil_Gupta_19b12e3a6a.webp" alt="Akhil Gupta">
+            <h3>Akhil Gupta</h3>
+            <p>Founder & CTO NOBROKER</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Saurabh_Garg_4e55e5f522.webp" alt="Saurabh Garg">
+            <h3>Saurabh Garg</h3>
+            <p>Co-Founder & CBO NOBROKER</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Vipin_Pathak_c2d0f367e9.webp" alt="Vipin Pathak">
+            <h3>Vipin Pathak</h3>
+            <p>Co-Founder & CEO Care24</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Ramakant_Sharma_56f8749d03.webp" alt="Ramakant Sharma">
+            <h3>Ramakant Sharma</h3>
+            <p>Founder & CEO LIVSPACE</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Mohit_Tandon_5742111581.webp" alt="Mohit Tandon">
+            <h3>Mohit Tandon</h3>
+            <p>Co-Founder DELHIVERY</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Abhishek_Goyal_07565e31e5.webp" alt="Abhishek Goyal">
+            <h3>Abhishek Goyal</h3>
+            <p>Co-Founder Tracxn</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Anurag_Jain_18eb13e01f.webp" alt="Anurag Jain">
+            <h3>Anurag Jain</h3>
+            <p>Founder & Executive Director KredX</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Harshvardhan_Lunia_5174542d13.webp" alt="Harshvardhan Lunia">
+            <h3>Harshvardhan Lunia</h3>
+            <p>Co-Founder & CEO LENDINGKART</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Sunil_Rao_6403565910.webp" alt="Sunil Rao">
+            <h3>Sunil Rao</h3>
+            <p>Country Head and Director Amazon</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Sharda_Balaji_b690558661.webp" alt="Sharda Balaji">
+            <h3>Sharda Balaji</h3>
+            <p>Co-Founder Novo Juris</p>
+        </div>
+        <div class="grid-item">
+            <img src="https://www.masaischool.com/our-investors/Kulin_Shah_04f1411516.webp" alt="Kulin Shah">
+            <h3>Kulin Shah</h3>
+            <p>Co-Founder Onsurity</p>
+        </div>
+    </div>
+</body>
+</html>
