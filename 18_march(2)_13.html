@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Layout</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            width: 800px;
+            gap: 20px;
+        }
+
+        .section {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .image-row img {
+            width: 48%;
+            max-height: 150px;
+            object-fit: cover;
+        }
+
+        .text-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .text-row p {
+            margin: 0;
+        }
+
+        .button {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h2>Revamp your home in style</h2>
+            <div class="image-row">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Rug">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Figurines">
+            </div>
+            <div class="text-row">
+                <p>Cushion covers, bedsheets & more</p>
+                <p>Figurines, vases & more</p>
+            </div>
+            <div class="image-row">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Storage">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Lighting">
+            </div>
+            <p>Home storage Lighting solutions</p>
+            <button class="button">Explore all</button>
+        </div>
+
+        <div class="section">
+            <h2>Starting ₹149 | Headphones</h2>
+            <div class="image-row">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="boAt">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="boult">
+            </div>
+            <div class="text-row">
+                <p>Starting ₹249 | boAt</p>
+                <p>Starting ₹349 | boult</p>
+            </div>
+            <div class="image-row">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Noise">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Zebronics">
+            </div>
+            <div class="text-row">
+                <p>Starting ₹649 | Noise</p>
+                <p>Starting ₹149 | Zebronics</p>
+            </div>
+            <button class="button">See all offers</button>
+        </div>
+    </div>
+</body>
+</html>

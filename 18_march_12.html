@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Display Properties</title>
+    <style>
+        .element {
+            border: 1px solid black;
+            padding: 10px;
+            margin: 5px;
+        }
+
+        #block-element {
+            display: block;
+            background-color: lightblue;
+        }
+
+        #inline-element {
+            display: inline;
+            background-color: lightgreen;
+        }
+
+        #inline-block-element {
+            display: inline-block;
+            background-color: lightyellow;
+        }
+
+        #hidden-element {
+            display: none;
+            background-color: lightcoral;
+        }
+
+        #toggleButton {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="block-element">Block Element: Takes up full width.</div>
+    <div id="inline-element">Inline Element: Only takes up content width.</div>
+    <div id="inline-block-element">Inline-block Element: Inline but can have width/height.</div>
+
+    <button id="toggleButton" onclick="toggleVisibility()">Toggle Hidden Element</button>
+
+    <div id="hidden-element">This element's visibility is toggled.</div>
+
+    <script>
+        function toggleVisibility() {
+            var hiddenElement = document.getElementById('hidden-element');
+            if (hiddenElement.style.display === 'none' || hiddenElement.style.display === '') {
+                hiddenElement.style.display = 'block';
+            } else {
+                hiddenElement.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
