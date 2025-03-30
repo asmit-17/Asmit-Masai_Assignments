@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Task Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .task-container { margin: 20px 0; }
+        .completed { text-decoration: line-through; color: gray; }
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+
+    <input id="taskInput" type="text" placeholder="Enter task">
+    <button id="addTask">Add Task</button>
+
+    <div>
+        <button id="allTasks">All Tasks</button>
+        <button id="completedTasks">Completed Tasks</button>
+        <button id="incompleteTasks">Incomplete Tasks</button>
+        <button id="sortTasks">Sort Tasks</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <p>Total Tasks: <span id="totalTasks">0</span></p>
+    <p>Completed Tasks: <span id="completedTasksCount">0</span></p>
+    <p>Incomplete Tasks: <span id="incompleteTasksCount">0</span></p>
+
+    <script>
+        let tasks = [];
+
+        document.getElementById("addTask").addEventListener("click", () => {
+            const taskInput = document.getElementById("taskInput");
+            const taskText = taskInput.value.trim();
+            if (taskText === "") return;
+            tasks.push({ text: taskText, completed: false });
+            taskInput.value = "";
+            renderTasks();
+        });
+
+        document.getElementById("taskList").addEventListener("click", (e) => {
+            if (e.target.classList.contains("delete")) {
+                const index = e.target.dataset.index;
+                tasks.splice(index, 1);
+                renderTasks();
+            } else if (e.target.classList.contains("toggle")) {
+                const index = e.target.dataset.index;
+                tasks[index].completed = !tasks[index].completed;
+                renderTasks();
+            }
+        });
+
+        document.getElementById("allTasks").addEventListener("click", () => renderTasks());
+        document.getElementById("completedTasks").addEventListener("click", () => renderTasks("completed"));
+        document.getElementById("incompleteTasks").addEventListener("click", () => renderTasks("incomplete"));
+        document.getElementById("sortTasks").addEventListener("click", () => {
+            tasks.sort((a, b) => a.text.localeCompare(b.text));
+            renderTasks();
+        });
+
+        function renderTasks(filter = "all") {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+            let filteredTasks = tasks;
+            if (filter === "completed") filteredTasks = tasks.filter(task => task.completed);
+            if (filter === "incomplete") filteredTasks = tasks.filter(task => !task.completed);
+
+            filteredTasks.forEach((task, index) => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <input type="checkbox" class="toggle" data-index="${index}" ${task.completed ? "checked" : ""}>
+                    <span class="${task.completed ? "completed" : ""}">${task.text}</span>
+                    <button class="delete" data-index="${index}">Delete</button>
+                `;
+                taskList.appendChild(li);
+            });
+
+            document.getElementById("totalTasks").textContent = tasks.length;
+            document.getElementById("completedTasksCount").textContent = tasks.filter(task => task.completed).length;
+            document.getElementById("incompleteTasksCount").textContent = tasks.filter(task => !task.completed).length;
+        }
+
+        renderTasks();
+    </script>
+
+</body>
+</html>

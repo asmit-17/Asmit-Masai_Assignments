@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Propagation</title>
+    <style>
+        .outer {
+            width: 300px;
+            height: 300px;
+            background-color: lightcoral;
+            padding: 20px;
+        }
+        .middle {
+            width: 200px;
+            height: 200px;
+            background-color: lightblue;
+            padding: 20px;
+        }
+        .inner {
+            width: 100px;
+            height: 100px;
+            background-color: lightgreen;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="outer">
+        Outer Div
+        <div class="middle">
+            Middle Div
+            <div class="inner">
+                Inner Div
+                <button id="innerButton">Inner Button</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showAlert(event, elementName) {
+            alert(elementName + " clicked!");
+        }
+
+        document.querySelector(".outer").addEventListener("click", (event) => showAlert(event, "Outer Div"));
+        document.querySelector(".middle").addEventListener("click", (event) => showAlert(event, "Middle Div"));
+        document.querySelector(".inner").addEventListener("click", (event) => showAlert(event, "Inner Div"));
+
+        document.querySelector(".outer").addEventListener("click", (event) => showAlert(event, "Outer Div (Capturing)"), true);
+        document.querySelector(".middle").addEventListener("click", (event) => showAlert(event, "Middle Div (Capturing)"), true);
+        document.querySelector(".inner").addEventListener("click", (event) => showAlert(event, "Inner Div (Capturing)"), true);
+
+        document.getElementById("innerButton").addEventListener("click", function(event) {
+            alert("Inner Button clicked! Stopping propagation.");
+            event.stopPropagation();
+        });
+
+    </script>
+
+</body>
+</html>
