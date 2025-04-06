@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+  <style>
+    /* Basic styling for the form */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .message {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>User Registration</h1>
+    <form id="registrationForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+
+      <button type="button" id="registerButton">Register</button>
+    </form>
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    // Handle form submission
+    document.getElementById("registerButton").addEventListener("click", async () => {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const messageDiv = document.getElementById("message");
+
+      // Reset message
+      messageDiv.textContent = "";
+      messageDiv.classList.remove("error", "success");
+
+      // Validate fields
+      if (!name || !email || !password) {
+        messageDiv.textContent = "All fields are required!";
+        messageDiv.classList.add("error");
+        return;
+      }
+
+      // Prepare data for POST request
+      const userData = {
+        name,
+        email,
+        password
+      };
+
+      try {
+        // Send POST request to the API
+        const response = await fetch("https://67f2a7ffec56ec1a36d3cb1e.mockapi.io/api/V1/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to register. Please try again.");
+        }
+
+        const responseData = await response.json();
+
+        // Display success message
+        messageDiv.textContent = "Registration successful!";
+        messageDiv.classList.add("success");
+      } catch (error) {
+        // Display error message
+        messageDiv.textContent = error.message || "An error occurred. Please try again.";
+        messageDiv.classList.add("error");
+      }
+    });
+  </script>
+</body>
+</html>

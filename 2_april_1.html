@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    input, select, button {
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .product-card img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: contain;
+    }
+    .loading, .error {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      color: #555;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Product Search</h1>
+
+  <div class="filters">
+    <select id="category">
+      <option value="">Select Category</option>
+      <option value="electronics">Electronics</option>
+      <option value="clothing">Clothing</option>
+      <option value="books">Books</option>
+    </select>
+    <input type="number" id="minPrice" placeholder="Min Price" />
+    <input type="number" id="maxPrice" placeholder="Max Price" />
+    <button onclick="fetchProducts()">Search</button>
+  </div>
+
+  <div id="status" class="loading"></div>
+  <div class="products" id="productList"></div>
+
+  <script>
+    async function fetchProducts() {
+      const category = document.getElementById("category").value;
+      const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
+      const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+      const statusDiv = document.getElementById("status");
+      const productList = document.getElementById("productList");
+
+      productList.innerHTML = "";
+      statusDiv.textContent = "Loading products...";
+      statusDiv.className = "loading";
+
+      const baseUrl = "https://67f2a7ffec56ec1a36d3cb1e.mockapi.io/api/V1/products";
+
+      try {
+        const response = await fetch(baseUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const products = await response.json();
+
+        // Filter products on client side
+        const filteredProducts = products.filter(product => {
+          const price = parseFloat(product.price);
+          const matchesCategory = !category || product.category === category;
+          const matchesPrice = price >= minPrice && price <= maxPrice;
+          return matchesCategory && matchesPrice;
+        });
+
+        if (filteredProducts.length === 0) {
+          statusDiv.textContent = "No products found.";
+          return;
+        }
+
+        statusDiv.textContent = "";
+        productList.innerHTML = filteredProducts.map(product => `
+          <div class="product-card">
+            <img src="${product.image || 'https://via.placeholder.com/150'}" alt="${product.name}" />
+            <h3>${product.name}</h3>
+            <p>Price: $${product.price}</p>
+          </div>
+        `).join("");
+
+      } catch (error) {
+        statusDiv.textContent = "Failed to load products. Please try again.";
+        statusDiv.className = "error";
+        console.error(error);
+      }
+    }
+
+    // Auto-load products on page load (optional)
+    window.onload = fetchProducts;
+  </script>
+
+</body>
+</html>
