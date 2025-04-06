@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <style>
+    /* Basic styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+    }
+
+    input[type="text"], input[type="email"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: calc(50% - 12px);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .user-list {
+      margin-top: 20px;
+    }
+
+    .user-item {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+
+    .message {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>User Dashboard</h1>
+    <form id="userForm">
+      <input type="text" id="name" placeholder="Enter Name" required>
+      <input type="email" id="email" placeholder="Enter Email" required>
+      <button type="button" id="addUserButton">Add User</button>
+    </form>
+    <div id="message" class="message"></div>
+    <div class="user-list" id="userList">
+      <!-- User items will be dynamically added here -->
+    </div>
+  </div>
+
+  <script>
+    const apiBaseUrl = "https://67f2bfd7ec56ec1a36d4156d.mockapi.io/api/V1/dashboard";
+
+    // Function to fetch and display users
+    async function fetchUsers() {
+      const userList = document.getElementById("userList");
+      userList.innerHTML = "<p>Loading users...</p>";
+
+      try {
+        const response = await fetch(apiBaseUrl);
+        if (!response.ok) throw new Error("Failed to fetch users.");
+        const users = await response.json();
+
+        userList.innerHTML = "";
+        users.forEach(user => {
+          const userItem = document.createElement("div");
+          userItem.classList.add("user-item");
+          userItem.innerHTML = `<strong>${user.name}</strong> - ${user.email}`;
+          userList.appendChild(userItem);
+        });
+      } catch (error) {
+        userList.innerHTML = `<p class="error">${error.message}</p>`;
+        console.error(error);
+      }
+    }
+
+    // Function to add a new user
+    document.getElementById("addUserButton").addEventListener("click", async () => {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const messageDiv = document.getElementById("message");
+
+      // Reset message
+      messageDiv.textContent = "";
+      messageDiv.classList.remove("error", "success");
+
+      // Validate inputs
+      if (!name || !email) {
+        messageDiv.textContent = "All fields are required!";
+        messageDiv.classList.add("error");
+        return;
+      }
+
+      const newUser = { name, email };
+
+      try {
+        const response = await fetch(apiBaseUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newUser)
+        });
+
+        if (!response.ok) throw new Error("Failed to add user.");
+
+        // Display success message
+        messageDiv.textContent = "User added successfully!";
+        messageDiv.classList.add("success");
+
+        // Fetch and update the user list
+        fetchUsers();
+      } catch (error) {
+        messageDiv.textContent = error.message || "An error occurred.";
+        messageDiv.classList.add("error");
+        console.error(error);
+      }
+    });
+
+    // Fetch users on page load
+    fetchUsers();
+  </script>
+</body>
+</html>
