@@ -1,0 +1,82 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Details</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        .body-dark{
+            background-color: #333;
+            color: white;
+        }
+        .footer-dark{
+            background-color:#444;
+        }
+        footer {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="characterDetails"></div>
+    <footer id="footerClock"></footer>
+
+    <script>
+        const characterDetails = document.getElementById('characterDetails');
+        const footerClock = document.getElementById('footerClock');
+        let isDark = false;
+        const params = new URLSearchParams(window.location.search);
+        const characterId = params.get('id');
+
+        fetch(`https://rickandmortyapi.com/api/character/${characterId}`)
+            .then(response => response.json())
+            .then(character => {
+                characterDetails.innerHTML = `
+                    <img src="${character.image}" alt="${character.name}">
+                    <h2>${character.name}</h2>
+                    <p>Status: ${character.status}</p>
+                    <p>Species: ${character.species}</p>
+                    <p>Type: ${character.type || 'Unknown'}</p>
+                    <p>Gender: ${character.gender}</p>
+                    <p>Origin: ${character.origin.name}</p>
+                    <p>Location: ${character.location.name}</p>
+                `;
+            });
+
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            footerClock.textContent = `${timeString} ${dateString}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        if(localStorage.getItem('dark')){
+            isDark = true;
+            document.body.classList.add('body-dark');
+            footerClock.classList.add('footer-dark');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rick and Morty Characters</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .character-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .character-card img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+        }
+        .body-dark{
+            background-color: #333;
+            color: white;
+        }
+        .character-card-dark{
+            border: 1px solid #555;
+        }
+        footer-dark{
+            background-color:#444;
+        }
+        .theme-button{
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-button" id="themeToggle">Toggle Theme</button>
+    <div class="container" id="characterContainer"></div>
+    <div class="pagination">
+        <button id="prevBtn">Previous</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <footer id="footerClock"></footer>
+
+    <script>
+        const characterContainer = document.getElementById('characterContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const footerClock = document.getElementById('footerClock');
+        const themeToggle = document.getElementById('themeToggle');
+        let currentPage = 1;
+        let isDark = false;
+
+        function fetchCharacters(page) {
+            fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayCharacters(data.results);
+                    prevBtn.disabled = !data.info.prev;
+                    nextBtn.disabled = !data.info.next;
+                });
+        }
+
+        function displayCharacters(characters) {
+            characterContainer.innerHTML = '';
+            characters.forEach(character => {
+                const card = document.createElement('div');
+                card.classList.add('character-card');
+                if(isDark){
+                    card.classList.add('character-card-dark')
+                }
+                card.innerHTML = `
+                    <img src="${character.image}" alt="${character.name}">
+                    <h3>${character.name}</h3>
+                    <a href="character.html?id=${character.id}" target="_blank">View Details</a>
+                `;
+                characterContainer.appendChild(card);
+            });
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            footerClock.textContent = `${timeString} ${dateString}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchCharacters(currentPage);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentPage++;
+            fetchCharacters(currentPage);
+        });
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            document.body.classList.toggle('body-dark');
+            if(isDark){
+                footerClock.classList.add('footer-dark');
+                document.querySelectorAll('.character-card').forEach(card => card.classList.add('character-card-dark'));
+            } else{
+                footerClock.classList.remove('footer-dark');
+                document.querySelectorAll('.character-card').forEach(card => card.classList.remove('character-card-dark'));
+            }
+        });
+
+        fetchCharacters(currentPage);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
