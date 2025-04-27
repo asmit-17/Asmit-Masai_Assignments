@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter with Step Control (HTML)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #counter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #counter-value {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        #controls button {
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #step-input-container {
+            margin-top: 15px;
+        }
+        #step-input-container label {
+            margin-right: 5px;
+        }
+        #step-input {
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="counter-container">
+        <div id="counter-value">0</div>
+        <div id="controls">
+            <button id="increase-btn">Increase</button>
+            <button id="decrease-btn">Decrease</button>
+        </div>
+        <div id="step-input-container">
+            <label for="step-input">Step:</label>
+            <input type="number" id="step-input" value="1">
+        </div>
+    </div>
+
+    <script>
+        const counterValueElement = document.getElementById('counter-value');
+        const increaseBtn = document.getElementById('increase-btn');
+        const decreaseBtn = document.getElementById('decrease-btn');
+        const stepInput = document.getElementById('step-input');
+        let counter = 0;
+        let step = 1;
+
+        function updateCounterDisplay() {
+            counterValueElement.textContent = counter;
+        }
+
+        stepInput.addEventListener('input', () => {
+            const inputValue = parseInt(stepInput.value);
+            step = isNaN(inputValue) ? 1 : inputValue;
+        });
+
+        increaseBtn.addEventListener('click', () => {
+            counter += step;
+            updateCounterDisplay();
+        });
+
+        decreaseBtn.addEventListener('click', () => {
+            counter -= step;
+            if (counter < 0) {
+                counter = 0;
+            }
+            updateCounterDisplay();
+        });
+
+       
+        updateCounterDisplay();
+    </script>
+</body>
+</html>

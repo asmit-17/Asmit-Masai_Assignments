@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlled Username Form</title>
+    <style>
+        #error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <form id="usernameForm">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username" value="">
+        </div>
+        <p id="error-message"></p>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('usernameForm');
+        const usernameInput = document.getElementById('username');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const usernameValue = usernameInput.value.trim();
+
+            if (usernameValue === '') {
+                errorMessage.textContent = 'Username is required.';
+            } else {
+                errorMessage.textContent = ''; 
+                alert(`Submitted username: ${usernameValue}`);
+            }
+        });
+
+        usernameInput.addEventListener('input', function() {
+            errorMessage.textContent = '';
+        });
+    </script>
+</body>
+</html>

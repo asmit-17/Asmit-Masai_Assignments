@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <title>Advanced Task Manager</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      .high-priority {
+        background-color: lightcoral;
+      }
+      .completed {
+        text-decoration: line-through;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 8px;
+        border: 1px solid #eee;
+      }
+      li > span {
+        flex-grow: 1;
+        margin: 0 8px;
+      }
+      button {
+        margin-left: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useCallback } = React;
+
+      const TaskManager = () => {
+        const [tasks, setTasks] = useState([]);
+        const [newTaskTitle, setNewTaskTitle] = useState("");
+        const [newTaskPriority, setNewTaskPriority] = useState("Medium");
+        const [priorityFilter, setPriorityFilter] = useState("All");
+        const [completionFilter, setCompletionFilter] = useState("All");
+
+        const addTask = useCallback(() => {
+          if (newTaskTitle.trim()) {
+            const newTask = {
+              id: Date.now(),
+              title: newTaskTitle,
+              priority: newTaskPriority,
+              completed: false,
+            };
+            setTasks((prevTasks) => {
+              const updatedTasks = [...prevTasks, newTask];
+              return sortTasksByPriority(updatedTasks);
+            });
+            setNewTaskTitle("");
+            setNewTaskPriority("Medium");
+          }
+        }, [newTaskTitle, newTaskPriority, setTasks]);
+
+        const toggleComplete = useCallback(
+          (taskId) => {
+            setTasks((prevTasks) =>
+              prevTasks.map((task) =>
+                task.id === taskId
+                  ? { ...task, completed: !task.completed }
+                  : task
+              )
+            );
+          },
+          [setTasks]
+        );
+
+        const deleteTask = useCallback(
+          (taskId) => {
+            setTasks((prevTasks) =>
+              prevTasks.filter((task) => task.id !== taskId)
+            );
+          },
+          [setTasks]
+        );
+
+        const sortTasksByPriority = useCallback((taskList) => {
+          const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+          return [...taskList].sort(
+            (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]
+          );
+        }, []);
+
+        const filteredTasks = useCallback(() => {
+          return tasks.filter((task) => {
+            const priorityMatch =
+              priorityFilter === "All" || task.priority === priorityFilter;
+            const completionMatch =
+              completionFilter === "All" ||
+              (completionFilter === "Completed" && task.completed) ||
+              (completionFilter === "Incomplete" && !task.completed);
+            return priorityMatch && completionMatch;
+          });
+        }, [tasks, priorityFilter, completionFilter]);
+
+        return (
+          <div>
+            <h2>Advanced Task Manager</h2>
+
+            <div>
+              <input
+                type="text"
+                placeholder="Task Title"
+                value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
+              />
+              <select
+                value={newTaskPriority}
+                onChange={(e) => setNewTaskPriority(e.target.value)}>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+              <button onClick={addTask}>Add Task</button>
+            </div>
+
+            <div>
+              <label>Priority:</label>
+              <select
+                value={priorityFilter}
+                onChange={(e) => setPriorityFilter(e.target.value)}>
+                <option value="All">All</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+
+              <label>Completion:</label>
+              <select
+                value={completionFilter}
+                onChange={(e) => setCompletionFilter(e.target.value)}>
+                <option value="All">All</option>
+                <option value="Completed">Completed</option>
+                <option value="Incomplete">Incomplete</option>
+              </select>
+            </div>
+
+            <ul>
+              {filteredTasks().map((task) => (
+                <li
+                  key={task.id}
+                  className={`${
+                    task.priority === "High" ? "high-priority" : ""
+                  } ${task.completed ? "completed" : ""}`}>
+                  <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => toggleComplete(task.id)}
+                  />
+                  <span>{task.title}</span>
+                  <span>(Priority: {task.priority})</span>
+                  <button onClick={() => deleteTask(task.id)}>Delete</button>
+                </li>
+              ))}
+              {filteredTasks().length === 0 && (
+                <li>No tasks match the current filters.</li>
+              )}
+            </ul>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<TaskManager />);
+    </script>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </body>
+</html>

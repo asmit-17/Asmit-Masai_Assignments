@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management (HTML)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #user-list li {
+            list-style-type: none;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+        }
+        #user-list li span {
+            flex-grow: 1;
+        }
+        #user-list button {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        #add-user-form, #edit-user-form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            display: none;
+        }
+        #add-user-form label, #edit-user-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #add-user-form input[type="text"], #add-user-form input[type="email"],
+        #edit-user-form input[type="text"], #edit-user-form input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .error {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Management</h1>
+
+    <button id="show-add-form">Add New User</button>
+
+    <div id="add-user-form">
+        <h2>Add New User</h2>
+        <form id="add-form">
+            <div>
+                <label for="add-name">Name:</label>
+                <input type="text" id="add-name" required>
+                <p class="error" id="add-name-error"></p>
+            </div>
+            <div>
+                <label for="add-email">Email:</label>
+                <input type="email" id="add-email" required>
+                <p class="error" id="add-email-error"></p>
+            </div>
+            <button type="submit">Add User</button>
+            <button type="button" id="cancel-add-form">Cancel</button>
+        </form>
+    </div>
+
+    <h2>User List</h2>
+    <ul id="user-list">
+        <li id="loading">Loading users...</li>
+    </ul>
+    <p id="fetch-error" style="color: red; display: none;">Failed to fetch users.</p>
+
+    <div id="edit-user-form">
+        <h2>Edit User</h2>
+        <form id="edit-form" data-user-id="">
+            <div>
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" required>
+                <p class="error" id="edit-name-error"></p>
+            </div>
+            <div>
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" required>
+                <p class="error" id="edit-email-error"></p>
+            </div>
+            <button type="submit">Save Changes</button>
+            <button type="button" id="cancel-edit-form">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+        const userList = document.getElementById('user-list');
+        const loadingElement = document.getElementById('loading');
+        const fetchErrorElement = document.getElementById('fetch-error');
+        const showAddFormButton = document.getElementById('show-add-form');
+        const addUserForm = document.getElementById('add-user-form');
+        const addForm = document.getElementById('add-form');
+        const addNameInput = document.getElementById('add-name');
+        const addEmailInput = document.getElementById('add-email');
+        const addNameError = document.getElementById('add-name-error');
+        const addEmailError = document.getElementById('add-email-error');
+        const cancelAddFormButton = document.getElementById('cancel-add-form');
+        const editUserForm = document.getElementById('edit-user-form');
+        const editForm = document.getElementById('edit-form');
+        const editNameInput = document.getElementById('edit-name');
+        const editEmailInput = document.getElementById('edit-email');
+        const editNameError = document.getElementById('edit-name-error');
+        const editEmailError = document.getElementById('edit-email-error');
+        const cancelEditFormButton = document.getElementById('cancel-edit-form');
+
+        const FIREBASE_URL = 'YOUR_FIREBASE_DATABASE_URL.json'; 
+
+        let editingUserId = null;
+
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        async function fetchUsers() {
+            loadingElement.style.display = 'block';
+            fetchErrorElement.style.display = 'none';
+            userList.innerHTML = '';
+            try {
+                const response = await fetch(FIREBASE_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                loadingElement.style.display = 'none';
+                if (data) {
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            const user = data[key];
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `
+                                <span>${user.name} (${user.email})</span>
+                                <button class="edit-btn" data-id="${key}">Edit</button>
+                                <button class="delete-btn" data-id="${key}">Delete</button>
+                            `;
+                            userList.appendChild(listItem);
+                        }
+                    }
+                    attachEventListenersToUsers();
+                } else {
+                    userList.innerHTML = '<li>No users found.</li>';
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                loadingElement.style.display = 'none';
+                fetchErrorElement.style.display = 'block';
+            }
+        }
+
+        function attachEventListenersToUsers() {
+            const editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(button => {
+                button.addEventListener('click', () => showEditForm(button.dataset.id));
+            });
+
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', () => deleteUser(button.dataset.id));
+            });
+        }
+
+        showAddFormButton.addEventListener('click', () => {
+            addUserForm.style.display = 'block';
+            showAddFormButton.style.display = 'none';
+        });
+
+        cancelAddFormButton.addEventListener('click', () => {
+            addUserForm.style.display = 'none';
+            showAddFormButton.style.display = 'block';
+            addNameError.textContent = '';
+            addEmailError.textContent = '';
+            addForm.reset();
+        });
+
+        addForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = addNameInput.value.trim();
+            const email = addEmailInput.value.trim();
+            let isValid = true;
+
+            if (!name) {
+                addNameError.textContent = 'Name is required.';
+                isValid = false;
+            } else {
+                addNameError.textContent = '';
+            }
+
+            if (!email) {
+                addEmailError.textContent = 'Email is required.';
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                addEmailError.textContent = 'Invalid email format.';
+                isValid = false;
+            } else {
+                addEmailError.textContent = '';
+            }
+
+            if (isValid) {
+                try {
+                    const response = await fetch(FIREBASE_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email }),
+                    });
+                    if (response.ok) {
+                        addForm.reset();
+                        addUserForm.style.display = 'none';
+                        showAddFormButton.style.display = 'block';
+                        fetchUsers();
+                    } else {
+                        console.error('Failed to add user:', response.status);
+                        alert('Failed to add user.');
+                    }
+                } catch (error) {
+                    console.error('Error adding user:', error);
+                    alert('Error adding user.');
+                }
+            }
+        });
+
+        function showEditForm(id) {
+            editingUserId = id;
+            const listItem = document.querySelector(`.edit-btn[data-id="${id}"]`).parentNode;
+            const name = listItem.querySelector('span').textContent.split('(')[0].trim();
+            const email = listItem.querySelector('span').textContent.split('(')[1].replace(')', '').trim();
+            editNameInput.value = name;
+            editEmailInput.value = email;
+            editForm.dataset.userId = id;
+            editUserForm.style.display = 'block';
+        }
+
+        cancelEditFormButton.addEventListener('click', () => {
+            editUserForm.style.display = 'none';
+            editForm.dataset.userId = '';
+            editNameError.textContent = '';
+            editEmailError.textContent = '';
+            editForm.reset();
+            editingUserId = null;
+        });
+
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = editForm.dataset.userId;
+            const name = editNameInput.value.trim();
+            const email = editEmailInput.value.trim();
+            let isValid = true;
+
+            if (!name) {
+                editNameError.textContent = 'Name is required.';
+                isValid = false;
+            } else {
+                editNameError.textContent = '';
+            }
+
+            if (!email) {
+                editEmailError.textContent = 'Email is required.';
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                editEmailError.textContent = 'Invalid email format.';
+                isValid = false;
+            } else {
+                editEmailError.textContent = '';
+            }
+
+            if (isValid) {
+                const updateURL = `${FIREBASE_URL.slice(0, -5)}/${id}.json`;
+                try {
+                    const response = await fetch(updateURL, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email }),
+                    });
+                    if (response.ok) {
+                        editUserForm.style.display = 'none';
+                        editForm.dataset.userId = '';
+                        editForm.reset();
+                        editingUserId = null;
+                        fetchUsers();
+                    } else {
+                        console.error('Failed to update user:', response.status);
+                        alert('Failed to update user.');
+                    }
+                } catch (error) {
+                    console.error('Error updating user:', error);
+                    alert('Error updating user.');
+                }
+            }
+        });
+
+        async function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                const deleteURL = `${FIREBASE_URL.slice(0, -5)}/${id}.json`;
+                try {
+                    const response = await fetch(deleteURL, {
+                        method: 'DELETE',
+                    });
+                    if (response.ok) {
+                        fetchUsers();
+                    } else {
+                        console.error('Failed to delete user:', response.status);
+                        alert('Failed to delete user.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                    alert('Error deleting user.');
+                }
+            }
+        }
+
+      
+        fetchUsers();
+    </script>
+</body>
+</html>

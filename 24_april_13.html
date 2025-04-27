@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Email Form (HTML)</title>
+    <style>
+        .email-field-container {
+            margin-bottom: 10px;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <form id="emailForm">
+        <div id="email-fields">
+            <div class="email-field-container">
+                <label for="email-0">Email 1:</label>
+                <input type="email" id="email-0" class="email-input">
+                <p class="error-message" id="error-0"></p>
+            </div>
+        </div>
+        <button type="button" id="addEmail">Add Email</button>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Entered Emails:</h2>
+    <ul id="email-list">
+        <li></li> </ul>
+
+    <script>
+        const emailFieldsContainer = document.getElementById('email-fields');
+        const addEmailButton = document.getElementById('addEmail');
+        const emailForm = document.getElementById('emailForm');
+        const emailList = document.getElementById('email-list');
+        let emailCount = 1;
+
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function addEmailField() {
+            emailCount++;
+            const newEmailContainer = document.createElement('div');
+            newEmailContainer.classList.add('email-field-container');
+            newEmailContainer.innerHTML = `
+                <label for="email-${emailCount}">Email ${emailCount}:</label>
+                <input type="email" id="email-${emailCount}" class="email-input">
+                <p class="error-message" id="error-${emailCount}"></p>
+            `;
+            emailFieldsContainer.appendChild(newEmailContainer);
+            updateEmailList();
+            attachInputEventListeners(); 
+        }
+
+        function updateEmailList() {
+            emailList.innerHTML = '';
+            const emailInputs = document.querySelectorAll('.email-input');
+            emailInputs.forEach(input => {
+                const listItem = document.createElement('li');
+                listItem.textContent = input.value;
+                const errorId = `error-${input.id.split('-')[1]}`;
+                const errorMessageElement = document.getElementById(errorId);
+                if (errorMessageElement && errorMessageElement.textContent !== '') {
+                    const errorSpan = document.createElement('span');
+                    errorSpan.style.color = 'red';
+                    errorSpan.textContent = ' (Invalid)';
+                    listItem.appendChild(errorSpan);
+                }
+                emailList.appendChild(listItem);
+            });
+        }
+
+        function handleInputChange(event) {
+            const inputElement = event.target;
+            const index = inputElement.id.split('-')[1];
+            const errorElement = document.getElementById(`error-${index}`);
+            if (errorElement) {
+                if (!validateEmail(inputElement.value)) {
+                    errorElement.textContent = 'Invalid email format';
+                } else {
+                    errorElement.textContent = '';
+                }
+            }
+            updateEmailList();
+        }
+
+        function attachInputEventListeners() {
+            const emailInputs = document.querySelectorAll('.email-input');
+            emailInputs.forEach(input => {
+                input.addEventListener('input', handleInputChange);
+            });
+        }
+
+        addEmailButton.addEventListener('click', addEmailField);
+        attachInputEventListeners(); 
+
+        emailForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const emailInputs = document.querySelectorAll('.email-input');
+            let allValid = true;
+            const submittedEmails = [];
+
+            emailInputs.forEach(input => {
+                const emailValue = input.value.trim();
+                if (emailValue !== '') {
+                    submittedEmails.push(emailValue);
+                    const index = input.id.split('-')[1];
+                    const errorElement = document.getElementById(`error-${index}`);
+                    if (!validateEmail(emailValue)) {
+                        allValid = false;
+                        if (errorElement) {
+                            errorElement.textContent = 'Invalid email format';
+                        }
+                    } else if (errorElement) {
+                        errorElement.textContent = '';
+                    }
+                }
+            });
+
+            updateEmailList(); 
+
+            if (!allValid) {
+                alert('Please correct the invalid email addresses.');
+            } else if (submittedEmails.length === 0) {
+                alert('Please enter at least one email address.');
+            } else {
+                alert(`Submitted emails: ${submittedEmails.join(', ')}`);
+            }
+        });
+
+ 
+        updateEmailList();
+    </script>
+</body>
+</html>

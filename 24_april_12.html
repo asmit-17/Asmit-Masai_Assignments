@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uncontrolled Username Form (HTML)</title>
+</head>
+<body>
+    <form id="usernameForm">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('usernameForm');
+        const usernameInput = document.getElementById('username');
+
+        form.addEventListener('submit'), function(event) {
+            event.preventDefault();
+            alert(`Submitted username: ${usernameInput.value}`);
+            usernameInput.value = ''; }
+    </script>
+</body>
+</html>

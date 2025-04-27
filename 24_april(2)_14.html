@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <title>Debugged To-Do List</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      li span {
+        flex-grow: 1;
+        margin-left: 8px;
+      }
+      li button {
+        margin-left: 8px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      const TodoList = () => {
+        const [tasks, setTasks] = useState([]);
+        const [newTask, setNewTask] = useState("");
+
+        const addTask = () => {
+          const trimmedTask = newTask.trim();
+          if (trimmedTask) {
+            setTasks([
+              ...tasks,
+              { id: Date.now(), text: trimmedTask, completed: false },
+            ]);
+            setNewTask("");
+          }
+        };
+
+        const toggleComplete = (id) => {
+          setTasks(
+            tasks.map((task) =>
+              task.id === id ? { ...task, completed: !task.completed } : task
+            )
+          );
+        };
+
+        const deleteTask = (id) => {
+          setTasks(tasks.filter((task) => task.id !== id));
+        };
+
+        return (
+          <div>
+            <h2>My To-Do List</h2>
+            <input
+              type="text"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+            />
+            <button onClick={addTask}>Add Task</button>
+            <ul>
+              {tasks.map((task) => (
+                <li
+                  key={task.id}
+                  style={{
+                    textDecoration: task.completed ? "line-through" : "none",
+                  }}>
+                  <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => toggleComplete(task.id)}
+                  />
+                  <span>{task.text}</span>
+                  <button onClick={() => deleteTask(task.id)}>
+                    Delete Task
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<TodoList />);
+    </script>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </body>
+</html>

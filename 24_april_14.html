@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List (HTML)</title>
+    <style>
+        #error-message {
+            color: red;
+        }
+        #task-list li {
+            list-style-type: none;
+            margin-bottom: 5px;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task List</h1>
+    <div id="loading-message">Loading tasks...</div>
+    <div id="error-message" style="display: none;"></div>
+    <ul id="task-list">
+        </ul>
+
+    <script>
+        const taskList = document.getElementById('task-list');
+        const loadingMessage = document.getElementById('loading-message');
+        const errorMessage = document.getElementById('error-message');
+        const firebaseURL = 'https://your-firebase-db.firebaseio.com/tasks.json'; 
+
+        async function fetchTasks() {
+            try {
+                const response = await fetch(firebaseURL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                loadingMessage.style.display = 'none';
+                renderTasks(data);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+                loadingMessage.style.display = 'none';
+                errorMessage.textContent = 'Failed to fetch tasks. Please try again later.';
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function renderTasks(tasksData) {
+            taskList.innerHTML = ''; 
+            if (tasksData) {
+                for (const key in tasksData) {
+                    if (tasksData.hasOwnProperty(key)) {
+                        const task = tasksData[key];
+                        const listItem = document.createElement('li');
+                        listItem.textContent = task.name; 
+                        listItem.dataset.taskId = key; 
+                        taskList.appendChild(listItem);
+                    }
+                }
+            }
+        }
+
+     
+        fetchTasks();
+    </script>
+</body>
+</html>

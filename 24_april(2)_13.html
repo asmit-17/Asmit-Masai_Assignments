@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <title>Dynamic Shopping List</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      input[type="text"] {
+        margin-right: 10px;
+        padding: 8px;
+      }
+      button {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 8px;
+        border: 1px solid #eee;
+      }
+      li button {
+        margin-left: 10px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+      }
+      .error {
+        color: red;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      const ShoppingList = () => {
+        const [items, setItems] = useState([]);
+        const [newItemInput, setNewItemInput] = useState("");
+        const [error, setError] = useState("");
+
+        const addItem = () => {
+          const trimmedInput = newItemInput.trim();
+          if (!trimmedInput) {
+            setError("Please enter an item name and quantity.");
+            return;
+          }
+
+          const parts = trimmedInput.split("-");
+          if (parts.length !== 2) {
+            setError(
+              'Please enter item and quantity in the format "Item Name - Quantity".'
+            );
+            return;
+          }
+
+          const itemName = parts[0].trim();
+          const quantityStr = parts[1].trim();
+          const quantity = parseInt(quantityStr, 10);
+
+          if (!itemName) {
+            setError("Item name cannot be empty.");
+            return;
+          }
+
+          if (isNaN(quantity) || quantity < 1) {
+            setError("Quantity must be a number greater than or equal to 1.");
+            return;
+          }
+
+          setError("");
+          setItems((prevItems) => [
+            ...prevItems,
+            { id: Date.now(), name: itemName, quantity },
+          ]);
+          setNewItemInput("");
+        };
+
+        const removeItem = (id) => {
+          setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        };
+
+        const clearAllItems = () => {
+          setItems([]);
+        };
+
+        return (
+          <div>
+            <h2>Shopping List</h2>
+            <input
+              type="text"
+              placeholder="e.g., Apples - 2"
+              value={newItemInput}
+              onChange={(e) => setNewItemInput(e.target.value)}
+            />
+            <button onClick={addItem}>Add Item</button>
+            {error && <p className="error">{error}</p>}
+
+            {items.length > 0 ? (
+              <ul>
+                {items.map((item) => (
+                  <li key={item.id}>
+                    <span>
+                      {item.name} - {item.quantity}
+                    </span>
+                    <button onClick={() => removeItem(item.id)}>Remove</button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Your shopping list is empty.</p>
+            )}
+
+            {items.length > 0 && (
+              <button onClick={clearAllItems}>Clear All</button>
+            )}
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<ShoppingList />);
+    </script>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </body>
+</html>
+- Dynamic Shopping List with Quantities
