@@ -1,0 +1,6 @@
+{
+  "tickets": [
+    { "id": 1, "title": "Network connectivity issues", "description": "Users are unable to connect to the internal network.", "priority": "high", "user": "john.doe", "status": "pending" },
+    { "id": 2, "title": "Software installation failed", "description": "Error during the installation of the new accounting software.", "priority": "medium", "user": "jane.smith", "status": "resolved" }
+  ]
+}

@@ -1,0 +1,8 @@
+
+{
+  "dishes": [
+    { "id": 1, "name": "Pasta Carbonara", "description": "Classic Italian pasta dish with eggs, cheese, pancetta, and black pepper.", "price": 12.99 },
+    { "id": 2, "name": "Chicken Curry", "description": "Delicious and aromatic chicken curry with various spices.", "price": 10.50 },
+    { "id": 3, "name": "Vegetable Stir-fry", "description": "A healthy and colorful mix of stir-fried vegetables.", "price": 8.75 }
+  ]
+}
